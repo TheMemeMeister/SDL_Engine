@@ -180,9 +180,9 @@ void PlayScene::start()
 	});
 
 	addChild(m_pNextButton);
-
+	const SDL_Color purple = { 255, 0, 255, 255 };
 	/* Instructions Label */
-	m_pInstructionsLabel = new Label("Press the backtick (`) character to toggle Debug View", "Consolas");
+	m_pInstructionsLabel = new Label("Press the backtick (`) character to toggle Debug View", "Consolas", 10, purple, glm::vec2(400.0f, 120.0f));
 	m_pInstructionsLabel->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH * 0.5f, 500.0f);
 
 	addChild(m_pInstructionsLabel);
@@ -222,21 +222,49 @@ void PlayScene::GUI_Function() const
 
 	//std::string grav = GravityBool ? "Gravity is turned ON" : "Gravity is turned OFF";
 	//std::cout << grav << std::endl;
-	static int xPlayerPos = 300;
+	static int xPlayerPos = 100;
 	if (ImGui::SliderInt("PlayerPosition x", &xPlayerPos, 0, 800)) {
 		m_pPlayer->getTransform()->position.x = xPlayerPos;
-		m_pBall->throwPosition = glm::vec2(xPlayerPos, 300);
+		m_pBall->throwPosition = glm::vec2(xPlayerPos, 200);
 		m_pBall->getTransform()->position = m_pPlayer->getTransform()->position;
 		m_pBall->getTransform()->position.x += m_pBall->getWidth();
 	
 	}
-	//ImGui::Slider("PlayerPosition x", &m_pPlayer->getTransform()->position.x, 0, 800);
-	static float velocity[2] = { 0 ,0 };
-	if (ImGui::SliderFloat2("Throw Speed (Initial Velocity", velocity, 0, 500)) {
-		m_pBall->throwSpeed = glm::vec2(velocity[0], -velocity[1]);
+	
+	static int xStormPos = 685;
+	if (ImGui::SliderInt("StormPosition x", &xStormPos, 0, 850)) {
+		m_pPlaneSprite->getTransform()->position.x = xStormPos;
+		
 	}
+	//ImGui::Slider("PlayerPosition x", &m_pPlayer->getTransform()->position.x, 0, 800);
+	static float initialAngle = 16;
+	static float initialVelocity = 95;
+
+	if (ImGui::SliderFloat("Throw Speed (Vi)", &initialVelocity, 0, 100)) {
+	
+	
+	}
+	if (ImGui::SliderFloat("Throw angle", &initialAngle, 0, 90)) {
+
+	
+	}
+	float testvar = 60;
+	std::cout << sin(glm::radians(testvar)) << std::endl;
+	
+	m_pBall->throwSpeed = glm::vec2(initialVelocity * cos(glm::radians(initialAngle)), -initialVelocity * sin(glm::radians(initialAngle)));
+	std::cout << "initial velocity X is: " << m_pBall->throwSpeed[0] << std::endl;
+	std::cout << "initial velocity  Y is: " << m_pBall->throwSpeed[1] << std::endl;
 
 
+	// THESE BOTH ASSUME GRAVITY IS ON FOR THE SIMULATION
+	const float MaxDistance = (initialVelocity * initialVelocity ) / (9.8);
+	const float DeltaDistance = (xStormPos - xPlayerPos);
+	ImGui::Text("Total Distance b/w Wookie and StormTrooper = %f" , DeltaDistance);
+	ImGui::Text("The Max throw distance (delta D x) is %f" , MaxDistance);
+
+	//if (ImGui::Button("Throw")) {
+	//	ImGui::LabelText("The Maximum horizontal distance for this throw is", )  //maybe use this for max throw. 
+	//}
 
 	ImGui::End();
 

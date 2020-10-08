@@ -44,13 +44,15 @@ void Target::m_move()
 	float deltaTime = 1.0 / 60.0f;
 	glm::vec2 gravity = glm::vec2(0, 9.8f);
 
-	getRigidBody()->velocity += (getRigidBody()->acceleration + gravity) * deltaTime;
 	if (hasGravity == false) {
-		getRigidBody()->velocity.y = 0;
+	
+		getTransform()->position += getRigidBody()->velocity * deltaTime;
+
 	}
-	
-	getTransform() -> position += getRigidBody()->velocity * deltaTime;
-	
+	else {
+		getRigidBody()->velocity += (getRigidBody()->acceleration + gravity) * deltaTime;
+		getTransform()->position += getRigidBody()->velocity * deltaTime;
+	}
 }
 void Target::m_checkBounds()
 {

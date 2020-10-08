@@ -37,6 +37,7 @@ private:
 	Button* m_pBackButton;
 	Button* m_pNextButton;
 	Label* m_pInstructionsLabel;
+	//Label* m_pMaxThrowLabel;   //maybe use this for max throw
 };
 
 #endif /* defined (__PLAY_SCENE__) */
