@@ -3,10 +3,11 @@
 #define __PLAY_SCENE__
 
 #include "Scene.h"
-#include "Plane.h"
+#include "Target.h"
 #include "Player.h"
 #include "Button.h"
 #include "Label.h"
+#include "Plane.h"
 
 class PlayScene : public Scene
 {
@@ -26,10 +27,11 @@ private:
 	std::string m_guiTitle;
 	
 	glm::vec2 m_mousePosition;
-
 	Plane* m_pPlaneSprite;
+	Target* m_pBall;
 	Player* m_pPlayer;
 	bool m_playerFacingRight;
+	/*bool* m_GravityBool = false;*/
 
 	// UI Items
 	Button* m_pBackButton;

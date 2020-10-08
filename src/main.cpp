@@ -1,3 +1,7 @@
+#pragma once
+#ifndef __main__
+#define __main__
+
 // Core Libraries
 #include <crtdbg.h>
 #include <iostream>
@@ -44,3 +48,4 @@ int main(int argc, char * args[])
 	return 0;
 }
 
+#endif

@@ -41,11 +41,25 @@ void Target::clean()
 
 void Target::m_move()
 {
-	getTransform()->position = getTransform()->position + getRigidBody()->velocity * 5.0f;
-}
+	float deltaTime = 1.0 / 60.0f;
+	glm::vec2 gravity = glm::vec2(0, 9.8f);
 
+	getRigidBody()->velocity += (getRigidBody()->acceleration + gravity) * deltaTime;
+	if (hasGravity == false) {
+		getRigidBody()->velocity.y = 0;
+	}
+	
+	getTransform() -> position += getRigidBody()->velocity * deltaTime;
+	
+}
 void Target::m_checkBounds()
 {
+}
+
+void Target::doThrow() {
+	getTransform()->position = throwPosition;
+	getRigidBody()->velocity = throwSpeed;
+	 
 }
 
 void Target::m_reset()

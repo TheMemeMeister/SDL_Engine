@@ -17,13 +17,16 @@ PlayScene::~PlayScene()
 
 void PlayScene::draw()
 {
-	if(EventManager::Instance().isIMGUIActive())
+	SDL_SetRenderDrawColor(Renderer::Instance()->getRenderer(), 255, 255, 255, 255);
+	SDL_RenderClear(Renderer::Instance()->getRenderer());
+	TextureManager::Instance()->draw("backround", 400, 300, 0, 255, true);
+	
+	drawDisplayList();
+	if (EventManager::Instance().isIMGUIActive())
 	{
 		GUI_Function();
 	}
 
-	drawDisplayList();
-	SDL_SetRenderDrawColor(Renderer::Instance()->getRenderer(), 255, 255, 255, 255);
 }
 
 void PlayScene::update()
@@ -116,17 +119,26 @@ void PlayScene::handleEvents()
 
 void PlayScene::start()
 {
+	//Loads backround texture from disk into RAM
+	TextureManager::Instance()->load("../Assets/textures/Backround.png", "backround");
+	
 	// Set GUI Title
 	m_guiTitle = "Play Scene";
-	
-	// Plane Sprite
-	m_pPlaneSprite = new Plane();
-	addChild(m_pPlaneSprite);
 
 	// Player Sprite
 	m_pPlayer = new Player();
 	addChild(m_pPlayer);
 	m_playerFacingRight = true;
+
+	//stormtrooper
+	m_pPlaneSprite = new Plane();
+	addChild(m_pPlaneSprite);
+
+	// Ball
+	m_pBall = new Target();
+	m_pBall->getTransform()->position = m_pPlayer->getTransform()->position;
+	m_pBall->getTransform()->position.x += m_pBall->getWidth();
+	addChild(m_pBall);
 
 	// Back Button
 	m_pBackButton = new Button("../Assets/textures/backButton.png", "backButton", BACK_BUTTON);
@@ -184,24 +196,48 @@ void PlayScene::GUI_Function() const
 	// See examples by uncommenting the following - also look at imgui_demo.cpp in the IMGUI filter
 	//ImGui::ShowDemoWindow();
 	
-	ImGui::Begin("Your Window Title Goes Here", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar);
+	ImGui::Begin("Physics Assigment 1", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar);
+	////Testing the Img::Button function
+	if (ImGui::Button("Throw")) {
+		m_pBall ->doThrow();
 
-	if(ImGui::Button("My Button"))
+		}
+	//if (buttonPressed) {
+	//	std::cout << "ThrowPressed" << std::endl;
+	//}
+
+
+	/*if(ImGui::Button("Throw"))
 	{
-		std::cout << "My Button Pressed" << std::endl;
-	}
+		std::cout << "Throw Pressed" << std::endl;
+	}*/
 
 	ImGui::Separator();
 
-	static float float3[3] = { 0.0f, 1.0f, 1.5f };
-	if(ImGui::SliderFloat3("My Slider", float3, 0.0f, 2.0f))
+	static bool GravityBool = false;
+	if ((ImGui::Checkbox("Gravity", &GravityBool)))
 	{
-		std::cout << float3[0] << std::endl;
-		std::cout << float3[1] << std::endl;
-		std::cout << float3[2] << std::endl;
-		std::cout << "---------------------------\n";
+		m_pBall->hasGravity = GravityBool;
 	}
+
+	//std::string grav = GravityBool ? "Gravity is turned ON" : "Gravity is turned OFF";
+	//std::cout << grav << std::endl;
+	static int xPlayerPos = 300;
+	if (ImGui::SliderInt("PlayerPosition x", &xPlayerPos, 0, 800)) {
+		m_pPlayer->getTransform()->position.x = xPlayerPos;
+		m_pBall->throwPosition = glm::vec2(xPlayerPos, 300);
+		m_pBall->getTransform()->position = m_pPlayer->getTransform()->position;
+		m_pBall->getTransform()->position.x += m_pBall->getWidth();
 	
+	}
+	//ImGui::Slider("PlayerPosition x", &m_pPlayer->getTransform()->position.x, 0, 800);
+	static float velocity[2] = { 0 ,0 };
+	if (ImGui::SliderFloat2("Throw Speed (Initial Velocity", velocity, 0, 500)) {
+		m_pBall->throwSpeed = glm::vec2(velocity[0], -velocity[1]);
+	}
+
+
+
 	ImGui::End();
 
 	// Don't Remove this
