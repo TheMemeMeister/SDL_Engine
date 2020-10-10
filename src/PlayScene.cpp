@@ -259,7 +259,7 @@ void PlayScene::GUI_Function() const
 	// THESE BOTH ASSUME GRAVITY IS ON FOR THE SIMULATION
 	const float MaxDistance = (initialVelocity * initialVelocity ) / (9.8);
 	const float DeltaDistance = (xStormPos - xPlayerPos);
-	ImGui::Text("Total Distance b/w Wookie and StormTrooper = %f" , DeltaDistance);
+	ImGui::Text("Total Distance b/w Ronaldo and The Goal = %f" , DeltaDistance);
 	ImGui::Text("The Max throw distance (delta D x) is %f" , MaxDistance);
 
 	//if (ImGui::Button("Throw")) {
