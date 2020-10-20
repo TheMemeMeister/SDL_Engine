@@ -6,6 +6,7 @@
 #include "imgui.h"
 #include "imgui_sdl.h"
 #include "Renderer.h"
+#include "Util.h"
 
 PlayScene::PlayScene()
 {
@@ -192,11 +193,10 @@ void PlayScene::GUI_Function() const
 {
 	// Always open with a NewFrame
 	ImGui::NewFrame();
-
 	// See examples by uncommenting the following - also look at imgui_demo.cpp in the IMGUI filter
 	//ImGui::ShowDemoWindow();
 	
-	ImGui::Begin("Physics Assigment 1", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar);
+	ImGui::Begin("Physics Lab 5", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar);
 	////Testing the Img::Button function
 	if (ImGui::Button("Throw")) {
 		m_pBall ->doThrow();
@@ -230,12 +230,17 @@ void PlayScene::GUI_Function() const
 		m_pBall->getTransform()->position.x += m_pBall->getWidth();
 	
 	}
-	
 	static int xStormPos = 685;
 	if (ImGui::SliderInt("StormPosition x", &xStormPos, 0, 850)) {
 		m_pPlaneSprite->getTransform()->position.x = xStormPos;
 		
 	}
+	static int RampWidth = 119;
+	static int RampHeight = 150;
+	if (ImGui::SliderInt("RampHeight", &RampHeight, 0, 850))
+	Util::DrawLine(m_pPlayer->getTransform()->position , m_pPlaneSprite->getTransform()->position);
+	Util::DrawLine(m_pPlayer->getTransform()->position, (m_pPlayer->getTransform()->position - glm::vec2(0, RampHeight)));
+	Util::DrawLine((m_pPlayer->getTransform()->position - glm::vec2(0, RampHeight)), m_pPlaneSprite->getTransform()->position);
 	//ImGui::Slider("PlayerPosition x", &m_pPlayer->getTransform()->position.x, 0, 800);
 	static float initialAngle = 16;
 	static float initialVelocity = 95;
