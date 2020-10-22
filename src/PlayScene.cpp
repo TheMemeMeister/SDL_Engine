@@ -128,12 +128,12 @@ void PlayScene::start()
 
 	// Player Sprite
 	m_pPlayer = new Player();
-	addChild(m_pPlayer);
+	//addChild(m_pPlayer);
 	m_playerFacingRight = true;
 
 	//stormtrooper
-	m_pPlaneSprite = new Plane();
-	addChild(m_pPlaneSprite);
+	m_pPlaneSprite = new Plane(); 
+	//addChild(m_pPlaneSprite);
 
 	// Ball
 	m_pBall = new Target();
@@ -223,21 +223,30 @@ void PlayScene::GUI_Function() const
 	//std::string grav = GravityBool ? "Gravity is turned ON" : "Gravity is turned OFF";
 	//std::cout << grav << std::endl;
 	static int xPlayerPos = 100;
-	if (ImGui::SliderInt("PlayerPosition x", &xPlayerPos, 0, 800)) {
+	static int RampHeight = 150;
+	if (ImGui::SliderInt("Triangle Start x", &xPlayerPos, 0, 800)) {
 		m_pPlayer->getTransform()->position.x = xPlayerPos;
-		m_pBall->throwPosition = glm::vec2(xPlayerPos, 200);
+		m_pBall->throwPosition = glm::vec2(xPlayerPos,(200 - RampHeight)); //TODO -> fix ball starting position
 		m_pBall->getTransform()->position = m_pPlayer->getTransform()->position;
 		m_pBall->getTransform()->position.x += m_pBall->getWidth();
 	
 	}
 	static int xStormPos = 685;
-	if (ImGui::SliderInt("StormPosition x", &xStormPos, 0, 850)) {
+	if (ImGui::SliderInt("End of Triangle x", &xStormPos, 0, 850)) {
 		m_pPlaneSprite->getTransform()->position.x = xStormPos;
 		
 	}
-	static int RampWidth = 119;
-	static int RampHeight = 150;
-	if (ImGui::SliderInt("RampHeight", &RampHeight, 0, 850))
+	static int RampWidth = xStormPos - xPlayerPos;
+	/*if (ImGui::SliderInt("delta X", &RampWidth, 0, 500)) {
+		if (m_pPlaneSprite->getTransform()->position.x - m_pPlayer->getTransform()->position.x <= RampWidth)
+		{
+			xStormPos += m_pPlaneSprite->getTransform()->position.x - m_pPlayer->getTransform()->position.x;
+		}
+		else
+			xStormPos -= RampWidth - (m_pPlaneSprite->getTransform()->position.x - m_pPlayer->getTransform()->position.x);
+
+	}*/
+		if (ImGui::SliderInt("RampHeight", &RampHeight, 0, 850))
 	Util::DrawLine(m_pPlayer->getTransform()->position , m_pPlaneSprite->getTransform()->position);
 	Util::DrawLine(m_pPlayer->getTransform()->position, (m_pPlayer->getTransform()->position - glm::vec2(0, RampHeight)));
 	Util::DrawLine((m_pPlayer->getTransform()->position - glm::vec2(0, RampHeight)), m_pPlaneSprite->getTransform()->position);
@@ -263,8 +272,6 @@ void PlayScene::GUI_Function() const
 
 	// THESE BOTH ASSUME GRAVITY IS ON FOR THE SIMULATION
 	const float MaxDistance = (initialVelocity * initialVelocity ) / (9.8);
-	const float DeltaDistance = (xStormPos - xPlayerPos);
-	ImGui::Text("Total Distance b/w Ronaldo and The Goal = %f" , DeltaDistance);
 	ImGui::Text("The Max throw distance (delta D x) is %f" , MaxDistance);
 
 	//if (ImGui::Button("Throw")) {
