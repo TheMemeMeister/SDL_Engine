@@ -15,8 +15,10 @@ public:
 	void doThrow();
 	bool hasGravity = false;
 
-	glm::vec2 throwSpeed;
+	double RampAngle = 0;
+	glm::vec2 SpeedOnRamp;
 	glm::vec2 throwPosition;
+	glm::vec2 SpeedOffRamp;
 private:
 	void m_move();
 	void m_checkBounds();
