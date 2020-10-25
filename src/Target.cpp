@@ -4,7 +4,7 @@
 
 Target::Target()
 {
-	TextureManager::Instance()->load("../Assets/textures/ball.png","circle");
+	TextureManager::Instance()->load("../Assets/textures/box.png","circle");
 
 	const auto size = TextureManager::Instance()->getTextureSize("circle");
 	setWidth(size.x);
@@ -42,7 +42,7 @@ void Target::clean()
 void Target::m_move()
 {
 	float deltaTime = 1.0 / 60.0f;
-	glm::vec2 gravity = glm::vec2(0, 9.8f);
+	glm::vec2 gravity = glm::vec2(0, 9.81f);
 	bool StaticFric = false;
 	//glm::vec2 VNorm = Util::normalize(getRigidBody()->velocity);
 	/*if (hasGravity == false) {
@@ -50,11 +50,38 @@ void Target::m_move()
 		getTransform()->position += getRigidBody()->velocity * deltaTime;
 
 	}*/
+
 		if (getTransform()->position.y >= 400  && getRigidBody()->velocity.x >= 0) {
 			getRigidBody()->acceleration = -SpeedOffRamp;
 			getRigidBody()->velocity.y = 0;
+			/*if ((Util::magnitude(getRigidBody()->velocity) < Util::magnitude(getRigidBody()->acceleration) > 0)) {
+				getRigidBody()->acceleration = (getRigidBody()->velocity);
+				
+
+			}*/
+			/*if (Util::magnitude(getRigidBody()->acceleration) < 1.0f) {
+				getRigidBody()->acceleration = -getRigidBody()->velocity;
+				getRigidBody()->velocity.y = 0;
+			}*/
+			if ((Util::magnitude(getRigidBody()->acceleration) > Util::magnitude(getRigidBody()->velocity))) {
+					getRigidBody()->velocity.y = 0;
+					getRigidBody()->velocity = glm::vec2(0, 0);
+					getRigidBody()->acceleration = glm::vec2(0, 0);
+			}
+			else {
+				getRigidBody()->velocity.y = 0;
+				getRigidBody()->velocity += getRigidBody()->acceleration;
+
+			}
+			/*if (Util::magnitude(getRigidBody()->velocity) < 1.0f ) {
+				getRigidBody()->velocity.y = 0;
+				getRigidBody()->velocity = glm::vec2(0, 0);
+				getRigidBody()->acceleration = glm::vec2(0, 0);
+
+			}*/
 			
-			
+			/*else
+				getRigidBody()->acceleration = -getRigidBody()->velocity;*/
 			//if (getRigidBody()->velocity.x > 0) {
 			//	/*getRigidBody()->velocity -= SpeedOffRamp * deltaTime;*/
 			//	getTransform()->position += getRigidBody()->velocity * deltaTime;
@@ -62,11 +89,15 @@ void Target::m_move()
 			/*else
 				getRigidBody()->velocity = glm::vec2(0, 0);*/
 		}
-		if (Util::magnitude(getRigidBody()->velocity) < 1.0f) {
+		/*if (Util::magnitude(getRigidBody()->velocity) < 1.0f) {
 			getRigidBody()->velocity = glm::vec2(0, 0);
 			getRigidBody()->acceleration = glm::vec2(0, 0);
 
-		}
+		}*/
+		/*else if ((Util::magnitude(getRigidBody()->velocity) < Util::magnitude(getRigidBody()->acceleration) > 0)) {
+			getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
+			getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
+		}*/
 		getRigidBody()->velocity += getRigidBody()->acceleration  * deltaTime;
 		getTransform()->position += getRigidBody()->velocity * deltaTime;
 	

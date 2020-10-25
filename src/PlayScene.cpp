@@ -18,7 +18,7 @@ PlayScene::~PlayScene()
 
 void PlayScene::draw()
 {
-	SDL_SetRenderDrawColor(Renderer::Instance()->getRenderer(), 255, 255, 255, 255);
+	SDL_SetRenderDrawColor(Renderer::Instance()->getRenderer(), 255, 0, 0, 255);
 	SDL_RenderClear(Renderer::Instance()->getRenderer());
 	TextureManager::Instance()->draw("backround", 400, 300, 0, 255, true);
 	drawDisplayList();
@@ -196,9 +196,9 @@ void PlayScene::GUI_Function() const
 	// See examples by uncommenting the following - also look at imgui_demo.cpp in the IMGUI filter
 	//ImGui::ShowDemoWindow();
 	
-	ImGui::Begin("Physics Lab 5", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar);
+	ImGui::Begin("Physics Assignment 2", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar);
 	////Testing the Img::Button function
-	if (ImGui::Button("Throw")) {
+	if (ImGui::Button("Start")) {
 		m_pBall ->doThrow();
 
 		}
@@ -227,7 +227,7 @@ void PlayScene::GUI_Function() const
 	static float grav = 9.81;
 	static float RampWidth;
 	static float initialAngle;
-	if (ImGui::SliderFloat("Triangle Start x", &xPlayerPos, 0, 800)) {
+	if (ImGui::SliderFloat("Hill Start x", &xPlayerPos, 0, 800)) {
 		m_pPlayer->getTransform()->position.x = xPlayerPos;
 		m_pBall->throwPosition = glm::vec2(xPlayerPos,(400 - RampHeight)); //TODO -> fix ball starting position
 		m_pBall->getTransform()->position = m_pPlayer->getTransform()->position;
@@ -237,7 +237,7 @@ void PlayScene::GUI_Function() const
 	
 	}
 	static float xStormPos = 685;
-	if (ImGui::SliderFloat("End of Triangle x", &xStormPos, 0, 850)) {
+	if (ImGui::SliderFloat("Hill of Triangle x", &xStormPos, 0, 850)) {
 		m_pPlaneSprite->getTransform()->position.x = xStormPos;
 		RampWidth = xStormPos - xPlayerPos;
 		initialAngle = atan(RampHeight / RampWidth);
@@ -266,7 +266,7 @@ void PlayScene::GUI_Function() const
 	//m_pBall->getTransform->rotation.x = initialAngle;
 	//std::cout << initialAngle << std::endl;
 	static float MewOfFric;
-	if (ImGui::SliderFloat("Fric Mew", &MewOfFric, 0, 10)) {
+	if (ImGui::SliderFloat("Fric Mew", &MewOfFric, 0, 2)) {
 
 
 	}
@@ -298,10 +298,10 @@ void PlayScene::GUI_Function() const
 	//if (ImGui::Button("Throw")) {
 	//	ImGui::LabelText("The Maximum horizontal distance for this throw is", )  //maybe use this for max throw. 
 	//}
-	Util::DrawLine(m_pPlayer->getTransform()->position, m_pPlaneSprite->getTransform()->position, glm::vec4(225, 0, 255, 255));
-	Util::DrawLine(m_pPlayer->getTransform()->position, (m_pPlayer->getTransform()->position - glm::vec2(0, RampHeight)), glm::vec4(225, 0, 255, 255));
-	Util::DrawLine((m_pPlayer->getTransform()->position - glm::vec2(0, RampHeight)), m_pPlaneSprite->getTransform()->position, glm::vec4(225, 0, 255, 255));
-	Util::DrawLine(m_pPlaneSprite->getTransform()->position, m_pPlaneSprite->getTransform()->position - glm::vec2(-400, 0), glm::vec4(225, 255, 0, 255));
+	Util::DrawLine(m_pPlayer->getTransform()->position, m_pPlaneSprite->getTransform()->position, glm::vec4(1, 0, 0, 1));
+	Util::DrawLine(m_pPlayer->getTransform()->position, (m_pPlayer->getTransform()->position - glm::vec2(0, RampHeight)), glm::vec4(1, 0, 0, 1));
+	Util::DrawLine((m_pPlayer->getTransform()->position - glm::vec2(0, RampHeight)), m_pPlaneSprite->getTransform()->position, glm::vec4(1, 0, 0, 1));
+	Util::DrawLine(m_pPlaneSprite->getTransform()->position, m_pPlaneSprite->getTransform()->position - glm::vec2(-400, 0), glm::vec4(1, 0, 0, 1));
 	ImGui::End();
 	// Don't Remove this
 	ImGui::Render();
