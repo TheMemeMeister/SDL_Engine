@@ -8,7 +8,8 @@
 #include "Button.h"
 #include "Label.h"
 #include "Plane.h"
-
+#include "CollisionManager.h"
+#include "SoundManager.h"
 class PlayScene : public Scene
 {
 public:

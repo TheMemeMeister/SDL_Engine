@@ -2,8 +2,8 @@
 #ifndef __PLAYER__
 #define __PLAYER__
 
-#include "PlayerAnimationState.h"
 #include "Sprite.h"
+#include "Label.h"
 
 class Player final : public Sprite
 {
@@ -17,12 +17,14 @@ public:
 	virtual void clean() override;
 
 	// setters
-	void setAnimationState(PlayerAnimationState new_state);
+	
+	bool isColliding(GameObject*);
+	float getDistance(GameObject*);
 
 private:
-	void m_buildAnimations();
 
-	PlayerAnimationState m_currentAnimationState;
+
+	glm::vec2 m_direction;
 };
 
 #endif /* defined (__PLAYER__) */

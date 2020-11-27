@@ -13,16 +13,20 @@ public:
 	virtual void update() override;
 	virtual void clean() override;
 	void doThrow();
+	void bounce();
 	bool hasGravity = false;
 
-	double RampAngle = 0;
-	glm::vec2 SpeedOnRamp;
+	/*double RampAngle = 0;*/
+	//glm::vec2 SpeedOnRamp;
 	glm::vec2 throwPosition;
-	glm::vec2 SpeedOffRamp;
+	glm::vec2 throwSpeed;
+	float TargetMass;
+	//glm::vec2 SpeedOffRamp;
+	void reset();
 private:
 	void m_move();
 	void m_checkBounds();
-	void m_reset();
+
 };
 
 
