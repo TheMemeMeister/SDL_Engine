@@ -334,15 +334,15 @@ void PlayScene::GUI_Function() const
 
 	}
 	if (ImGui::SliderFloat("Mass of Paddle", &PaddleMass, 0, 90)) {
+		
+		m_pPlayer->PlayerMass = PaddleMass;
+	}
+	if (ImGui::SliderFloat("Mass Of Object", &ObjectMass, 0, 90)) {
 		m_pBall->TargetMass = ObjectMass;
 
 	}
-	if (ImGui::SliderFloat("Mass Of Object", &ObjectMass, 0, 90)) {
-
-
-	}
 	if (ImGui::SliderFloat("Paddle Hit Force", &PaddleScaler, 0, 10)) {
-
+		m_pPlayer->PaddleScaler = PaddleScaler;
 
 	}
 	//float testvar = 60;

@@ -17,7 +17,8 @@ public:
 	virtual void clean() override;
 
 	// setters
-	
+	float PlayerMass;
+	float PaddleScaler;
 	bool isColliding(GameObject*);
 	float getDistance(GameObject*);
 

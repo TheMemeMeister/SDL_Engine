@@ -1,8 +1,8 @@
 #include "CollisionManager.h"
 #include "Util.h"
 #include <algorithm>
-
-
+#include "Target.h"
+#include "Player.h"
 
 int CollisionManager::squaredDistance(const glm::vec2 p1, const glm::vec2 p2)
 {
@@ -254,9 +254,15 @@ bool CollisionManager::circleAABBCheck(GameObject* object1, GameObject* object2)
 						// top right or top left
 					{
 						
+						Target* ball = static_cast<Target*>(object1);
+						Player* player = static_cast<Player*>(object2);
+						float mass1 = ball->TargetMass;
+						float mass2 = player->PlayerMass;
+						float paddlescaler = player->PaddleScaler;
 						if (angle <= 45)
 						{
-							object1->getRigidBody()->velocity = glm::vec2(velocityX, -velocityY);
+
+							object1->getRigidBody()->velocity = glm::vec2((mass1 - mass2)/(mass1+ mass2) * object1->getRigidBody()->velocity.x +((2*mass2)/(mass1 + mass2)* object2->getRigidBody()->velocity.x)* paddlescaler, - velocityY);
 						}
 						else
 						{
@@ -267,13 +273,18 @@ bool CollisionManager::circleAABBCheck(GameObject* object1, GameObject* object2)
 					if ((attackVector.x > 0 && attackVector.y > 0) || (attackVector.x < 0 && attackVector.y > 0))
 						// bottom right or bottom left
 					{
+						Target* ball = static_cast<Target*>(object1);
+						Player* player = static_cast<Player*>(object2);
+						float mass1 = ball->TargetMass;
+						float mass2 = player->PlayerMass;
+						float paddlescaler = player->PaddleScaler;
 						if (angle <= 135)
 						{
 							object1->getRigidBody()->velocity = glm::vec2(-velocityX, velocityY);
 													}
 						else
 						{
-							object1->getRigidBody()->velocity = glm::vec2(velocityX, -velocityY);
+							object1->getRigidBody()->velocity = glm::vec2((mass1 - mass2) / (mass1 + mass2) * object1->getRigidBody()->velocity.x + ((2 * mass2) / (mass1 + mass2) * object2->getRigidBody()->velocity.x)* paddlescaler, -velocityY);
 													}
 					}
 				}
