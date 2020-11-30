@@ -20,7 +20,9 @@ public:
 	//glm::vec2 SpeedOnRamp;
 	glm::vec2 throwPosition;
 	glm::vec2 throwSpeed;
+	float PPM;
 	float TargetMass;
+	float ObjectType;
 	//glm::vec2 SpeedOffRamp;
 	void reset();
 private:

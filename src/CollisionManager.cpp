@@ -259,10 +259,11 @@ bool CollisionManager::circleAABBCheck(GameObject* object1, GameObject* object2)
 						float mass1 = ball->TargetMass;
 						float mass2 = player->PlayerMass;
 						float paddlescaler = player->PaddleScaler;
+						float ppm = ball->PPM;
 						if (angle <= 45)
 						{
 
-							object1->getRigidBody()->velocity = glm::vec2((mass1 - mass2)/(mass1+ mass2) * object1->getRigidBody()->velocity.x +((2*mass2)/(mass1 + mass2)* object2->getRigidBody()->velocity.x)* paddlescaler, - velocityY);
+							object1->getRigidBody()->velocity = glm::vec2((mass1 - mass2)/(mass1+ mass2) * object1->getRigidBody()->velocity.x +((2*mass2)/(mass1 + mass2)* object2->getRigidBody()->velocity.x)* paddlescaler * ppm, - velocityY);
 						}
 						else
 						{
@@ -278,13 +279,14 @@ bool CollisionManager::circleAABBCheck(GameObject* object1, GameObject* object2)
 						float mass1 = ball->TargetMass;
 						float mass2 = player->PlayerMass;
 						float paddlescaler = player->PaddleScaler;
+						float ppm = ball->PPM;
 						if (angle <= 135)
 						{
 							object1->getRigidBody()->velocity = glm::vec2(-velocityX, velocityY);
 													}
 						else
 						{
-							object1->getRigidBody()->velocity = glm::vec2((mass1 - mass2) / (mass1 + mass2) * object1->getRigidBody()->velocity.x + ((2 * mass2) / (mass1 + mass2) * object2->getRigidBody()->velocity.x)* paddlescaler, -velocityY);
+							object1->getRigidBody()->velocity = glm::vec2((mass1 - mass2) / (mass1 + mass2) * object1->getRigidBody()->velocity.x + ((2 * mass2) / (mass1 + mass2) * object2->getRigidBody()->velocity.x)* paddlescaler * ppm, -velocityY);
 													}
 					}
 				}

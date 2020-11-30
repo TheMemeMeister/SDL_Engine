@@ -4,8 +4,8 @@
 
 Target::Target()
 {
-	TextureManager::Instance()->load("../Assets/textures/ball.png","ball");
-
+	TextureManager::Instance()->load("../Assets/textures/roundball.png","ball");
+	TextureManager::Instance()->load("../Assets/textures/Bullet1.png", "Rect");
 	const auto size = TextureManager::Instance()->getTextureSize("ball");
 	setWidth(size.x);
 	setHeight(size.y);
@@ -26,7 +26,15 @@ void Target::draw()
 	const auto y = getTransform()->position.y;
 
 	// draw the target
-	TextureManager::Instance()->draw("ball", x, y, 0, 255, true);
+	if (ObjectType == 1) {
+		TextureManager::Instance()->draw("ball", x, y, 0, 255, true);
+
+	}
+	else if (ObjectType == 0) {
+		TextureManager::Instance()->draw("Rect", x, y, 0, 255, true);
+	}
+	
+
 }
 
 void Target::update()
@@ -109,12 +117,12 @@ void Target::m_move()
 
 	if (hasGravity == false) {
 
-		getTransform()->position += getRigidBody()->velocity * deltaTime;
+		getTransform()->position += getRigidBody()->velocity * deltaTime * PPM;
 
 	}
 	else {
 		getRigidBody()->velocity += (getRigidBody()->acceleration + gravity) * deltaTime;
-		getTransform()->position += getRigidBody()->velocity * deltaTime;
+		getTransform()->position += getRigidBody()->velocity * deltaTime * PPM;
 	}
 }
 void Target::m_checkBounds()
@@ -127,24 +135,24 @@ void Target::m_checkBounds()
 	else if (getTransform()->position.y < 1) //Ball hits Ciel. {
 	{
 		getTransform()->position.y = 0+  getHeight();
-		getRigidBody()->velocity.y *= -1;
+		getRigidBody()->velocity.y *= -1 ;
 	}
 	if (getTransform()->position.x > 800) //Ball hits Right. {
 	{
 		getTransform()->position.x = 800 - getWidth();
-		getRigidBody()->velocity.x *= -1;
+		getRigidBody()->velocity.x *= -1 ;
 	}
 	else if (getTransform()->position.x < 1) //Ball hits Left. {
 	{
 
 		getTransform()->position.x = 0 + getWidth();
-		getRigidBody()->velocity.x *= -1;
+		getRigidBody()->velocity.x *= -1 ;
 	}
 }
 
 void Target::doThrow() {
 	getTransform()->position = throwPosition;
-	getRigidBody()->velocity = throwSpeed;
+	getRigidBody()->velocity = throwSpeed * PPM;
 	 
 }
 

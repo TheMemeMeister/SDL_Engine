@@ -9,7 +9,7 @@ Player::Player()
 	auto size = TextureManager::Instance()->getTextureSize("circle");
 	setWidth(size.x);
 	setHeight(size.y);
-
+	RotAmount = 0;
 	getTransform()->position = glm::vec2(400.0f, 300.0f);
 	getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
@@ -26,7 +26,7 @@ void Player::draw()
 	const auto x = getTransform()->position.x;
 	const auto y = getTransform()->position.y;
 
-	TextureManager::Instance()->draw("circle", x, y, 0, 255, true);
+	TextureManager::Instance()->draw("circle", x, y, RotAmount, 255, true);
 }
 void Player::update(){}
 //void Player::update()

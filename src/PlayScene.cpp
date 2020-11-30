@@ -40,7 +40,12 @@ void PlayScene::update()
 		m_pPlayer->getTransform()->position.y = mouse_y;
 	}
 	m_pBall->update();
-	CollisionManager::circleAABBCheck(m_pBall, m_pPlayer);
+	if (m_pBall->ObjectType == 0) {
+		CollisionManager::circleAABBCheck(m_pBall, m_pPlayer);
+	}
+	else if(m_pBall->ObjectType == 1) {
+		CollisionManager::circleAABBCheck(m_pBall, m_pPlayer);
+	}
 }
 
 void PlayScene::clean()
@@ -92,7 +97,7 @@ void PlayScene::handleEvents()
 void PlayScene::start()
 {
 	//Loads backround texture from disk into RAM
-	TextureManager::Instance()->load("../Assets/textures/Backround.png", "backround");
+	TextureManager::Instance()->load("../Assets/textures/Backround2.jpg", "backround");
 	
 	// Set GUI Title
 	m_guiTitle = "Play Scene";
@@ -287,12 +292,22 @@ void PlayScene::GUI_Function() const
 	// See examples by uncommenting the following - also look at imgui_demo.cpp in the IMGUI filter
 	//ImGui::ShowDemoWindow();
 
-	ImGui::Begin("Physics Assigment 1", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar);
+	ImGui::Begin("Physics Assigment 3 Sene 2", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar);
 	////Testing the Img::Button function
+	
+
 	if (ImGui::Button("Throw")) {
 		m_pBall->doThrow();
 		m_pBall->throwPosition = glm::vec2(200, 200);
 	}
+	if (ImGui::Button("Rotate Paddle")) {
+		auto size = TextureManager::Instance()->getTextureSize("circle");
+		m_pPlayer->RotAmount += 90;
+		m_pPlayer->setWidth(size.y);
+		m_pPlayer -> setHeight(size.x);
+
+	}
+	
 	//if (buttonPressed) {
 	//	std::cout << "ThrowPressed" << std::endl;
 	//}
@@ -309,6 +324,7 @@ void PlayScene::GUI_Function() const
 	if ((ImGui::Checkbox("Gravity", &GravityBool)))
 	{
 		m_pBall->hasGravity = GravityBool;
+
 	}
 
 	//std::string grav = GravityBool ? "Gravity is turned ON" : "Gravity is turned OFF";
@@ -322,19 +338,25 @@ void PlayScene::GUI_Function() const
 
 	}*/
 
-	
+
 	//ImGui::Slider("PlayerPosition x", &m_pPlayer->getTransform()->position.x, 0, 800);
 	static float initialVelocity = 16;
 	static float ObjectMass = 50;
 	static float PaddleMass = 50;
-	static int ObjectType = 1;
+	static int ObjectType = 0;
 	static float PaddleScaler = 5;
+	static float PPM = 1;
 	if (ImGui::SliderFloat("Throw Speed (Vi)", &initialVelocity, 0, 100)) {
 
+		m_pBall->throwSpeed = glm::vec2(initialVelocity, initialVelocity);
+	}
 
+	if (ImGui::SliderFloat("PPM", &PPM, 0, 2)) {
+
+		m_pBall->PPM = PPM;
 	}
 	if (ImGui::SliderFloat("Mass of Paddle", &PaddleMass, 0, 90)) {
-		
+
 		m_pPlayer->PlayerMass = PaddleMass;
 	}
 	if (ImGui::SliderFloat("Mass Of Object", &ObjectMass, 0, 90)) {
@@ -345,24 +367,33 @@ void PlayScene::GUI_Function() const
 		m_pPlayer->PaddleScaler = PaddleScaler;
 
 	}
-	//float testvar = 60;
-	//std::cout << sin(glm::radians(testvar)) << std::endl;
+	if (ImGui::SliderInt("Object Type", &ObjectType, 0, 1)) {
+		if (ObjectType == 1) {
+			m_pBall->ObjectType = ObjectType;
 
-	m_pBall->throwSpeed = glm::vec2(initialVelocity,initialVelocity);
+		}
+		else if (ObjectType == 0) {
+			m_pBall->ObjectType = ObjectType;
+		}
+		m_pBall->throwSpeed = glm::vec2(initialVelocity, initialVelocity);
+		//float testvar = 60;
+		//std::cout << sin(glm::radians(testvar)) << std::endl;
+
+		//m_pBall->throwSpeed = glm::vec2(initialVelocity,initialVelocity);
 
 
 
-	// THESE BOTH ASSUME GRAVITY IS ON FOR THE SIMULATION
-	
+		// THESE BOTH ASSUME GRAVITY IS ON FOR THE SIMULATION
 
-	//if (ImGui::Button("Throw")) {
-	//	ImGui::LabelText("The Maximum horizontal distance for this throw is", )  //maybe use this for max throw. 
-	//}
 
-	ImGui::End();
+		//if (ImGui::Button("Throw")) {
+		//	ImGui::LabelText("The Maximum horizontal distance for this throw is", )  //maybe use this for max throw. 
+		//}
+	}
+		ImGui::End();
 
-	// Don't Remove this
-	ImGui::Render();
-	ImGuiSDL::Render(ImGui::GetDrawData());
-	ImGui::StyleColorsDark();
-}
+		// Don't Remove this
+		ImGui::Render();
+		ImGuiSDL::Render(ImGui::GetDrawData());
+		ImGui::StyleColorsDark();
+	}
