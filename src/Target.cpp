@@ -117,12 +117,12 @@ void Target::m_move()
 
 	if (hasGravity == false) {
 
-		getTransform()->position += getRigidBody()->velocity * deltaTime * PPM;
+		getTransform()->position += getRigidBody()->velocity * deltaTime * PPM * TargetMass;
 
 	}
 	else {
 		getRigidBody()->velocity += (getRigidBody()->acceleration + gravity) * deltaTime;
-		getTransform()->position += getRigidBody()->velocity * deltaTime * PPM;
+		getTransform()->position += getRigidBody()->velocity * deltaTime * PPM * TargetMass;
 	}
 }
 void Target::m_checkBounds()
